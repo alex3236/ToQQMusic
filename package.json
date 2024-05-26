@@ -1,0 +1,17 @@
+{
+  "name": "to-qq-music",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "LGPL-3.0-or-later",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": {
+    "name": "Alex3236",
+    "url": "https://alex3236.top"
+  },
+  "dependencies": {
+    "inquirer": "8.0.0",
+    "qq-music-api": "https://github.com/jsososo/QQMusicApi"
+  }
+}
