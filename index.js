@@ -29,6 +29,7 @@ async function loadConfig() {
             let config = JSON.parse(fs.readFileSync("./config.json", 'utf8'))
             if (!config.cookies || !config.dirid) {
                 console.error("配置文件格式错误, 请检查后重试")
+                await pauseAndExit(1)
             }
             return config
         }
