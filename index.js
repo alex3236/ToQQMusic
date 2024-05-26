@@ -3,16 +3,18 @@ const inquirer = require('inquirer')
 const fs = require('node:fs')
 const { exit } = require("node:process")
 
-function pauseAndExit(code) {
-    inquirer.prompt([
-        {
-            type: 'input',
-            name: 'ans',
-            message: '程序结束. 按 Enter 退出.'
-        }
-    ]).then(_ => {
-        exit(0)
-    })
+async function pauseAndExit(code) {
+    try {
+        await inquirer.prompt([
+            {
+                type: 'input',
+                name: 'ans',
+                message: '程序结束. 按 Enter 退出.'
+            }
+        ])
+    } finally {
+        exit(code)
+    }
 }
 
 async function loadConfig() {
@@ -22,7 +24,7 @@ async function loadConfig() {
                 cookies: "", dirid: 201
             }, null, 4))
             console.log("配置文件不存在, 已创建默认配置文件")
-            pauseAndExit(0)
+            await pauseAndExit(0)
         } else {
             let config = JSON.parse(fs.readFileSync("./config.json", 'utf8'))
             if (!config.cookies || !config.dirid) {
@@ -32,7 +34,7 @@ async function loadConfig() {
         }
     } catch (error) {
         console.error("处理配置文件时发生错误:", error)
-        pauseAndExit(1)
+        await pauseAndExit(1)
     }
 }
 
@@ -47,7 +49,7 @@ async function loadSongList() {
         return await JSON.parse(fs.readFileSync(current_file, 'utf8', 'r'))
     } catch (error) {
         console.error("读取音乐列表文件时发生错误: ", error)
-        pauseAndExit(1)
+        await pauseAndExit(1)
     }
 }
 
@@ -118,7 +120,7 @@ async function main() {
         fs.writeFileSync("lastLeft.json", JSON.stringify(songList.slice(i + 1), null, 4))
     }
 
-    pauseAndExit(0)
+    await pauseAndExit(0)
 }
 
 main()
