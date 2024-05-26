@@ -49,13 +49,13 @@
 
 4. 再次运行，输入歌单列表，开始导入
 
-## Dev
+## 源码启动
 ```shell
 $ yarn
 $ yarn run start
 ```
 
-## Build (Desparated)
+## 构建二进制文件（已过时）
 ```shell
 $ pnpm i -g pkg
 $ pkg -t node16-win-x64 -C GZip index.js -o dist/to-qqmusic.exe
