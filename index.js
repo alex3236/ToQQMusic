@@ -19,14 +19,14 @@ async function pauseAndExit(code) {
 
 async function loadConfig() {
     try {
-        if (!fs.existsSync("./config.json")) {
-            fs.writeFileSync("./config.json", JSON.stringify({
+        if (!fs.existsSync("config.json")) {
+            fs.writeFileSync("config.json", JSON.stringify({
                 cookies: "", dirid: 201
             }, null, 4))
             console.log("配置文件不存在, 已创建默认配置文件")
             await pauseAndExit(0)
         } else {
-            let config = JSON.parse(fs.readFileSync("./config.json", 'utf8'))
+            let config = JSON.parse(fs.readFileSync("config.json", 'utf8'))
             if (!config.cookies || !config.dirid) {
                 console.error("配置文件格式错误, 请检查后重试")
                 await pauseAndExit(1)
@@ -46,8 +46,10 @@ async function loadSongList() {
             name: 'current_file',
             message: '音乐列表文件路径: '
         }])
-        let current_file = answers.current_file
-        return await JSON.parse(fs.readFileSync(current_file, 'utf8', 'r'))
+        let current_file = answers.current_file.replace(/^"|"$/g, '')
+
+        let fileContents = fs.readFileSync(current_file, 'utf8')
+        return fileContents.split('\n');
     } catch (error) {
         console.error("读取音乐列表文件时发生错误: ", error)
         await pauseAndExit(1)
@@ -79,15 +81,13 @@ async function getSongs(fullName) {
     }
 }
 
-async function chooseSong(obj, dirid) {
-    var title = obj.t.replace(/ - [\（(].*[\)）]/i, '').replaceAll(/[（\(\)）]/g, ' ').trim()
-    var artist = obj.s
-    var fullName = title + ' ' + artist.replace(/\/.*$/g, '')
+async function chooseSong(song, dirid) {
+    var fullName = song
     var choices = await getSongs(fullName)
     var answers = await inquirer.prompt([
         {
             type: 'list',
-            message: `请指定: ${title} - ${artist}`,
+            message: `请指定: ${fullName}`,
             name: 'ans',
             choices: choices,
             pageSize: 12
@@ -118,14 +118,9 @@ async function main() {
     for (let i = 0; i < songList.length; i++) {
         const song = songList[i]
         await chooseSong(song, config.dirid)
-        fs.writeFileSync("lastLeft.json", JSON.stringify(songList.slice(i + 1), null, 4))
+        fs.writeFileSync("lastLeft.txt", songList.slice(i + 1).join('\n'))
     }
-
     await pauseAndExit(0)
 }
 
 main()
-// qqMusic.api('songlist/add', { mid: '002qU5aY3Qu24y', dirid: 201 })
-//     .then(res => console.log(res))
-//     .catch(err => console.log(err))
-
