@@ -90,7 +90,7 @@ async function chooseSong(song, dirid) {
             message: `请指定: ${fullName}`,
             name: 'ans',
             choices: choices,
-            pageSize: 12
+            pageSize: 15
         }
     ])
     if (answers.ans == 0) {
