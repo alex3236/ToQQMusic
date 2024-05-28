@@ -130,5 +130,5 @@ dist
 .pnp.*
 
 # PROJECT SPECIFIC
-/lastLeft.json
+/lastLeft.txt
 /config.json

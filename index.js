@@ -28,13 +28,13 @@ async function loadConfig() {
         } else {
             let config = JSON.parse(fs.readFileSync("config.json", 'utf8'))
             if (!config.cookies || !config.dirid) {
-                console.error("配置文件格式错误, 请检查后重试")
+                console.error("配置文件未填写或内容缺失, 请检查后重试")
                 await pauseAndExit(1)
             }
             return config
         }
     } catch (error) {
-        console.error("处理配置文件时发生错误:", error)
+        console.error("处理配置文件时发生错误: ", error)
         await pauseAndExit(1)
     }
 }
@@ -103,7 +103,7 @@ async function chooseSong(song, dirid) {
             console.log(res)
         }
     } catch (error) {
-        console.error('发生错误: ' + error)
+        console.error('发生错误: ', error)
         return
     }
 }
